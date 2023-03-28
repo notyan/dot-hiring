@@ -1,0 +1,9 @@
+all:
+  hosts:
+    dot-vm:
+      ansible_user: 
+      ansible_host: 
+  children:
+    dot-hiring:
+      hosts:
+        dot-vm:

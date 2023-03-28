@@ -1,0 +1,14 @@
+- name: install Nginx
+  include_tasks: nginx.yml
+
+- name: install php 8.1
+  include_tasks: php.yml
+
+- name: install MySQL 5.7
+  include_tasks: mysl.yml
+
+- name: install Composer
+  include_tasks: comoser.yml
+
+- name: install Docker
+  include_tasks: docker.yml

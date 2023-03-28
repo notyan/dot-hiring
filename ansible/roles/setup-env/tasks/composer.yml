@@ -1,0 +1,12 @@
+- name: Download Composer installer
+      get_url:
+        url: https://getcomposer.org/installer
+        dest: /tmp/composer-installer.php
+
+    - name: Verify Composer installer
+      shell: php -r "if (hash_file('sha384', '/tmp/composer-installer.php') === '{{ composer_hash }}') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('/tmp/composer-installer.php'); } echo PHP_EOL;"
+      register: composer_verify
+
+    - name: Run Composer installer
+      shell: php /tmp/composer-installer.php --install-dir=/usr/local/bin --filename=composer
+      when: composer_verify.stdout == "Installer verified"
