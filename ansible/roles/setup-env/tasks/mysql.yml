@@ -1,0 +1,23 @@
+- name: Add public key mysql from ubuntu server
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 467B942D3A79BD29
+
+- name: Add MySQL 5.7 APT repository
+  apt_repository:
+    repo: "deb http://repo.mysql.com/apt/ubuntu/ bionic mysql-5.7"
+    state: present
+
+- name: Install MySQL 5.7 and pip3
+  apt:
+    name: 
+      - mysql-client=5.7.41-1ubuntu18.04
+      - mysql-community-server
+      - python3-pip
+    default_release: "bionic"
+    state: present
+    update_cache: yes
+
+- name: install PyMySQL
+  pip:
+    name: PyMySQL

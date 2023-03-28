@@ -1,7 +1,7 @@
 all:
   hosts:
     dot-vm:
-      ansible_user: ubuntu
+      ansible_user: royan
       ansible_host: 34.136.50.248
   children:
     dot-hiring:
