@@ -2,6 +2,7 @@
   apt_key:
     keyserver: keyserver.ubuntu.com
     id: 467B942D3A79BD29
+    state: present
 
 - name: Add MySQL 5.7 APT repository
   apt_repository:
@@ -21,3 +22,4 @@
 - name: install PyMySQL
   pip:
     name: PyMySQL
+    state: present
