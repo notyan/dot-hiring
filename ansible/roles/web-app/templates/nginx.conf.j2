@@ -1,0 +1,31 @@
+server {
+    listen 80;
+    server_name {{ app_domain }};
+    return 301 https://{{ app_domain }}$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name {{ app_domain }};
+    root /var/www/{{ app_domain }}/public;
+
+    ssl_certificate /etc/letsencrypt/live/{{ app_domain }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ app_domain }}/privkey.pem;
+
+    index index.php;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/run/php/php8.1-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    error_log /var/log/nginx/error.log;
+    access_log /var/log/nginx/access.log;
+
+    client_max_body_size 10M;
+}

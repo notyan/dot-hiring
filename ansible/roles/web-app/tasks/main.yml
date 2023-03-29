@@ -1,0 +1,8 @@
+- name: make preparation before installation
+  include_tasks: prepare.yml
+
+- name: install laravel-starter
+  include_tasks: laravel.yml
+
+# - name: install next.js app
+#   include_tasks: next.yml

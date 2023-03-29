@@ -1,0 +1,11 @@
+- name: Clone required app
+  hosts: dot-hiring
+  roles:
+    - name: web-app
+  vars:
+    mysql_root_password: "r00tP455"
+    sql_admin_user: "dot-user"
+    sql_admin_password: "d0tp455w0rd"
+    app_domain: "dot.defaroyan.my.id"
+    certbot_email: "example@gmail.com"
+  gather_facts: no

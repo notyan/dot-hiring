@@ -1,0 +1,83 @@
+- name: Check if the laravel-starter folder exists
+  become: yes
+  ansible.builtin.stat:
+    path: "/var/www/{{ app_domain }}"
+  register: folder_check
+
+- name: Clone the laravel-starter
+  become: yes
+  ansible.builtin.git:
+    repo: https://github.com/nasirkhan/laravel-starter.git
+    dest: "/var/www/{{ app_domain }}"
+
+- name: Install laravel-starter app
+  become: yes
+  composer:
+    command: install
+    working_dir: "/var/www/{{ app_domain }}"
+    no_dev: yes
+  when: not folder_check.stat.exists
+  environment:
+    COMPOSER_NO_INTERACTION: "1"
+
+- name: copy .env file
+  become: yes
+  template:
+    src: "env.j2"
+    dest: "/var/www/{{ app_domain }}/.env"
+
+- name: Run the migrations
+  become: yes
+  shell: 
+    cmd: "php artisan migrate:fresh --seed"
+    chdir: "/var/www/{{ app_domain }}/"
+
+- name: Link Storage Directory
+  become: yes
+  shell: 
+    cmd: "php artisan storage:link"
+    chdir: "/var/www/{{ app_domain }}/"
+
+- name: Add Demo Data
+  become: yes
+  shell: 
+    cmd: "php artisan starter:insert-demo-data"
+    chdir: "/var/www/{{ app_domain }}/"
+
+- name: Configure Nginx for HTTPS
+  become: yes
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/{{ app_domain }}
+
+- name: create symlink to enable site
+  file:
+    src: "/etc/nginx/sites-available/{{ app_domain }}"
+    dest: "/etc/nginx/sites-enabled/{{ app_domain }}"
+    state: link
+
+- name: stop PHP-FPM
+  service:
+    name: php8.1-fpm
+    state: stopped
+
+- name: start PHP-FPM
+  service:
+    name: php8.1-fpm
+    state: started
+
+- name: stop nginx
+  become: yes
+  systemd: 
+    name: nginx
+    state: stopped
+
+- name: Generate SSL certificate with Certbot
+  become: yes
+  shell: certbot certonly --standalone -d "{{ app_domain }}"  --agree-tos --register-unsafely-without-email
+
+- name: start nginx
+  become: yes
+  systemd: 
+    name: nginx
+    state: started
