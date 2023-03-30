@@ -6,3 +6,27 @@
       - software-properties-common
       - php8.1-fpm
     state: latest
+
+- name:  delete apache fodler
+  become: yes 
+  file:
+    state: absent
+    path: /etc/apache2/
+
+- name: delete default nginx page
+  become: yes
+  file:
+    state: absent
+    path: /var/www/html
+
+- name: delete default app
+  become: yes
+  file:
+    state: absent
+    path: /etc/nginx/sites-available/default
+
+- name: delete default app
+  become: yes
+  file:
+    state: absent
+    path: /etc/nginx/sites-enabled/default

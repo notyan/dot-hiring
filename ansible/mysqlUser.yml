@@ -21,3 +21,21 @@
       login_password: "{{ mysql_root_password }}"
       name: laravel_starter
       state: present
+
+  - name: Allow remote connection into mysql
+    become: yes
+    shell: sudo sed -i 's/bind-address    = 127.0.0.1/bind-address    = 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
+  
+  - name: restart mysql service
+    become: yes
+    shell: systemctl restart mysql
+
+  - name: Create MySQL remote user
+    become: yes
+    mysql_user:
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+      name: "remote-user"
+      password: "remote-user-P455"
+      host: "%"
+      priv: '*.*:ALL,GRANT'

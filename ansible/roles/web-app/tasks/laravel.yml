@@ -1,9 +1,3 @@
-- name: Check if the laravel-starter folder exists
-  become: yes
-  ansible.builtin.stat:
-    path: "/var/www/{{ app_domain }}"
-  register: folder_check
-
 - name: Clone the laravel-starter
   become: yes
   ansible.builtin.git:
@@ -16,9 +10,9 @@
     command: install
     working_dir: "/var/www/{{ app_domain }}"
     no_dev: yes
-  when: not folder_check.stat.exists
   environment:
     COMPOSER_NO_INTERACTION: "1"
+    COMPOSER_ALLOW_SUPERUSER: "1"
 
 - name: copy .env file
   become: yes
@@ -27,7 +21,6 @@
     dest: "/var/www/{{ app_domain }}/.env"
 
 - name: Run the migrations
-  become: yes
   shell: 
     cmd: "php artisan migrate:fresh --seed"
     chdir: "/var/www/{{ app_domain }}/"
@@ -39,7 +32,6 @@
     chdir: "/var/www/{{ app_domain }}/"
 
 - name: Add Demo Data
-  become: yes
   shell: 
     cmd: "php artisan starter:insert-demo-data"
     chdir: "/var/www/{{ app_domain }}/"
@@ -51,20 +43,19 @@
     dest: /etc/nginx/sites-available/{{ app_domain }}
 
 - name: create symlink to enable site
+  become: yes
   file:
     src: "/etc/nginx/sites-available/{{ app_domain }}"
     dest: "/etc/nginx/sites-enabled/{{ app_domain }}"
     state: link
 
-- name: stop PHP-FPM
-  service:
-    name: php8.1-fpm
-    state: stopped
+- name: chown the folder
+  become: yes
+  shell: chown -R www-data:www-data /var/www/{{ app_domain }}/*
 
-- name: start PHP-FPM
-  service:
-    name: php8.1-fpm
-    state: started
+- name: restart PHP-FPM
+  become: yes
+  shell: systemctl restart php8.1-fpm
 
 - name: stop nginx
   become: yes
@@ -72,9 +63,17 @@
     name: nginx
     state: stopped
 
+- name: Check if the certificate exists
+  become: yes
+  ansible.builtin.stat:
+    path: "/etc/letsencrypt/live/{{ app_domain }}"
+  register: cert_check
+
+
 - name: Generate SSL certificate with Certbot
   become: yes
   shell: certbot certonly --standalone -d "{{ app_domain }}"  --agree-tos --register-unsafely-without-email
+  when: not cert_check.stat.exists
 
 - name: start nginx
   become: yes

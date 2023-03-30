@@ -1,5 +1,5 @@
-- name: make preparation before installation
-  include_tasks: prepare.yml
+# - name: make preparation before installation
+#   include_tasks: prepare.yml
 
 - name: install laravel-starter
   include_tasks: laravel.yml
