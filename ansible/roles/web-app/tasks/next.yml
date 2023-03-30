@@ -1,0 +1,16 @@
+- name: Git clone repository
+  git:
+    repo: https://github.com/vercel/next.js.git
+    dest: /app/next.js
+    version: canary
+    depth: 10
+  register: git_output
+
+- name: Copy cms-contentful folder
+  copy:
+    src: /app/next.js/examples/cms-contentful/
+    dest: /app/cms-contentful
+    remote_src: yes
+
+# - name: setup gitlab webhook
+#   include_tasks: cms-contentful/gitlab.yml
