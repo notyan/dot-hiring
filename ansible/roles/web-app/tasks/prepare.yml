@@ -1,4 +1,3 @@
-
 - name: Install certbot
   become: yes 
   apt: 
@@ -7,4 +6,3 @@
       - software-properties-common
       - php8.1-fpm
     state: latest
-    apt

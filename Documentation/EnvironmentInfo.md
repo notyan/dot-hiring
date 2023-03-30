@@ -1,11 +1,12 @@
 # Informasi environment server sesuai dengan ketentuan
+## Installation Process
 The installation process of server environment are using ansible.
 
 1. Run `cd ansible` to change directoy into ansible directory
 2. Run `ansible-playbook -i inventory.yml setup-env.yml` to start the environment installation
 3. login into vm to configure the mysql root password
 4. Run `mysql` to login into mysql interface
-5. Run `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'somePassword';` to change root password 
+5. Run `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'r00tP455';` to change root password  and the plugin for authentication
 6. Exit the mysql interface
 7. Run ```ansible-playbook -i inventory.yml mysqlUser.yml``` To create the user for laravel application
 
