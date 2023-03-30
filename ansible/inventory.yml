@@ -2,7 +2,7 @@ all:
   hosts:
     dot-vm:
       ansible_user: royan
-      ansible_host: 34.136.50.248
+      ansible_host: dot.defaroyan.my.id
   children:
     dot-hiring:
       hosts:
