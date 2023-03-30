@@ -3,6 +3,7 @@ all:
     dot-vm:
       ansible_user: royan
       ansible_host: dot.defaroyan.my.id
+      ansible_port: 11727
   children:
     dot-hiring:
       hosts:

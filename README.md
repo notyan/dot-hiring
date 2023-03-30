@@ -17,3 +17,11 @@ https://github.com/notyan/dot-hiring/blob/main/Documentation/SecurityConfig.md
 https://github.com/notyan/dot-hiring/blob/main/Documentation/CiCd.md
 #### Link repository GitLab aplikasi b dan pastikan bisa melakukan pengecekan pipeline CI/CD yang diminta.
 https://github.com/notyan/dot-hiring/blob/main/Documentation/GitlabRepo.md
+
+
+### Step to deploy the application
+
+1. https://github.com/notyan/dot-hiring/blob/main/Documentation/InstanceInfo.md
+2. https://github.com/notyan/dot-hiring/blob/main/Documentation/EnvironmentInfo.md
+3. https://github.com/notyan/dot-hiring/blob/main/Documentation/DeploymentStep.md
+4. https://github.com/notyan/dot-hiring/blob/main/Documentation/CiCd.md

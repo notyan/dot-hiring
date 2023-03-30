@@ -1,0 +1,23 @@
+- name: Deploy Docker container
+  hosts: dot-hiring
+  become: true
+  vars:
+    mysql_root_password: "r00tP455"
+    sql_admin_user: "dot-user"
+    sql_admin_password: "d0tp455w0rd"
+  tasks:
+  - name: create mysql user
+    mysql_user:
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+      name: "{{ sql_admin_user }}"
+      password: "{{ sql_admin_password }}"
+      priv: '*.*:ALL'
+      state: present
+
+  - name: create mysql database
+    mysql_db:
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+      name: laravel_starter
+      state: present

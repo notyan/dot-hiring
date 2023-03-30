@@ -1,10 +1,13 @@
 # Informasi environment server sesuai dengan ketentuan
 The installation process of server environment are using ansible.
 
-1.  ```cd ansible``` to change directoy into ansible directory
-2.  ```ansible-playbook -i inventory.yml setup-env.yml``` to start the environment installation
-3. Login into vm and configure the Mysql Root password using ```ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'r00tP455';```
-4. ```ansible-playbook -i inventory.yml MysqlUser.yml``` To create the user for laravel application
+1. Run `cd ansible` to change directoy into ansible directory
+2. Run `ansible-playbook -i inventory.yml setup-env.yml` to start the environment installation
+3. login into vm to configure the mysql root password
+4. Run `mysql` to login into mysql interface
+5. Run `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'somePassword';` to change root password 
+6. Exit the mysql interface
+7. Run ```ansible-playbook -i inventory.yml mysqlUser.yml``` To create the user for laravel application
 
 ### NGINX
 Nginx menggunakan versi `nginx version: nginx/1.18.0 (Ubuntu)`
